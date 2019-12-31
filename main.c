@@ -8,27 +8,6 @@
 #include <avr/io.h>
 #include<util/delay.h>
 
-int main(void)
-{
-    /* Replace with your application code */
-
-    while (1) 
-    {
-		forward();
-		_delay_ms(1500);//as diameter is 5cm thus to cover 10cm it would require 1.5seconds
-		left_turn();
-		forward();
-		_delay_ms(1500);
-		right_turn();
-		forward();
-		_delay_ms(1500);
-		backward();
-		stop();
-		buzzer();
-		_delay_ms(2000);
-		stop();
-    }
-}
 
 void motor_init()
 {
@@ -66,4 +45,25 @@ void buzzer()
 void stop()
 {
 	motor_init();
+}
+int main(void)
+{
+    /* Replace with your application code */
+
+    while (1) 
+    {
+		forward();
+		_delay_ms(1500);//as diameter is 5cm thus to cover 10cm it would require 1.5seconds
+		left_turn();
+		forward();
+		_delay_ms(1500);
+		right_turn();
+		forward();
+		_delay_ms(1500);
+		backward();
+		stop();
+		buzzer();
+		_delay_ms(2000);
+		stop();
+    }
 }
