@@ -4,22 +4,29 @@
  * Created: 12/30/2019 3:50:18 PM
  * Author : new
  */ 
-
+#define  F_CPU 14745600
 #include <avr/io.h>
 #include<util/delay.h>
 
 int main(void)
 {
     /* Replace with your application code */
-	
+
     while (1) 
     {
 		forward();
+		_delay_ms(1500);//as diameter is 5cm thus to cover 10cm it would require 1.5seconds
 		left_turn();
 		forward();
+		_delay_ms(1500);
 		right_turn();
 		forward();
+		_delay_ms(1500);
 		backward();
+		stop();
+		buzzer();
+		_delay_ms(2000);
+		stop();
     }
 }
 
@@ -50,4 +57,13 @@ void left_turn()
 {
 motor_init();
 PORTA=0x09;	
+}
+void buzzer()
+{
+	DDRB=0x00;
+	PORTB=0x01;
+}
+void stop()
+{
+	motor_init();
 }
