@@ -40,8 +40,10 @@ PORTA=0x09;
 }
 void buzzer()
 {
-	DDRB=0x00;
+	DDRB=0x01;
 	PORTB=0x01;
+	_delay_ms(2000);
+	PORTB=0x00;
 }
 void stop()
 {
@@ -58,10 +60,21 @@ void velocity(const int speed1,const int speed2)
 {
 	
 velocity_init();
-OCR0A=speed1;
+OCR0A=speed1;//using 8bit timers
 OCR0B=speed2;
 
 }	
+void soft_left()
+{
+	motor_init();
+	PORTA=0x02;	
+	
+}
+void soft_right()
+{
+	motor_init();
+	PORTA=0x04;
+}
 int main(void)
 {
 	/* Replace with your application code */
@@ -81,7 +94,6 @@ int main(void)
 		backward();
 		stop();
 		buzzer();
-		_delay_ms(2000);
 		stop();
 	}
 }
