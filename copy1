@@ -1,4 +1,6 @@
-#include <avr/io.h>
+#define F_CPU 14745600
+
+#include<avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -66,7 +68,7 @@ void forward (void) //both wheels forward
 
 void back (void) //both wheels backward
 {
-  motion_set(0x09);
+  motion_set(0x0A);
 }
 
 void left (void) //Left wheel backward, Right wheel forward
@@ -127,7 +129,49 @@ int main()
 		stop();						
 		_delay_ms(500);
 	
+		back(); //both wheels backward						
+		_delay_ms(1000);
+
+		stop();						
+		_delay_ms(500);
 		
+		left(); //Left wheel backward, Right wheel forward
+		_delay_ms(1000);
+		
+		stop();						
+		_delay_ms(500);
+		
+		right(); //Left wheel forward, Right wheel backward
+		_delay_ms(1000);
+
+		stop();						
+		_delay_ms(500);
+
+		soft_left(); //Left wheel stationary, Right wheel forward
+		_delay_ms(1000);
+		
+		stop();						
+		_delay_ms(500);
+
+		soft_right(); //Left wheel forward, Right wheel is stationary
+		_delay_ms(1000);
+
+		stop();						
+		_delay_ms(500);
+
+		soft_left_2(); //Left wheel backward, right wheel stationary
+		_delay_ms(1000);
+
+		stop();						
+		_delay_ms(500);
+
+		soft_right_2(); //Left wheel stationary, Right wheel backward
+		_delay_ms(1000);
+
+		stop();						
+		_delay_ms(1000);
 	}
 }
+
+
 
