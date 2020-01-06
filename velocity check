@@ -1,0 +1,106 @@
+#define  F_CPU 14745600
+#include <avr/io.h>
+#include<util/delay.h>
+#include <avr/interrupt.h>
+
+
+void motor_init()
+{
+	DDRA=0x0F;
+	PORTA=0x00;
+	DDRL = DDRL | 0x18;   //Setting PL3 and PL4 pins as output for PWM generation
+	PORTL = PORTL | 0x18;
+}
+void timer5_init()
+{
+	TCCR5B = 0x00;	//Stop
+	TCNT5H = 0xFF;	//Counter higher 8-bit value to which OCR5xH value is compared with
+	TCNT5L = 0x01;	//Counter lower 8-bit value to which OCR5xH value is compared with
+	OCR5AH = 0x00;	//Output compare register high value for Left Motor
+	OCR5AL = 0xFF;	//Output compare register low value for Left Motor
+	OCR5BH = 0x00;	//Output compare register high value for Right Motor
+	OCR5BL = 0xFF;	//Output compare register low value for Right Motor
+	OCR5CH = 0x00;	//Output compare register high value for Motor C1
+	OCR5CL = 0xFF;	//Output compare register low value for Motor C1
+	TCCR5A = 0xA9;	/*{COM5A1=1, COM5A0=0; COM5B1=1, COM5B0=0; COM5C1=1 COM5C0=0}
+ 					  For Overriding normal port functionality to OCRnA outputs.
+				  	  {WGM51=0, WGM50=1} Along With WGM52 in TCCR5B for Selecting FAST PWM 8-bit Mode*/
+	
+	TCCR5B = 0x0B;	//WGM12=1; CS12=0, CS11=1, CS10=1 (Prescaler=64)
+}
+void velocity(unsigned char speed1,unsigned char speed2)
+{
+	
+	float i = 1;
+	OCR5AL = (unsigned char)speed1*i;		//set the velocity for left motor or motor 1
+	OCR5BL = (unsigned char)speed2*i;
+}
+
+void forward()
+{   velocity(245,245);
+	PORTA=0x05;
+}
+void backward()
+{
+	
+	motor_init();
+	PORTA=0x0A;
+}
+void right_turn()
+{
+	motor_init();
+	PORTA=0x06;
+}
+void left_turn()
+{
+	motor_init();
+	PORTA=0x09;
+}
+void buzzer()
+{
+	DDRB=0x00;
+	PORTB=0x01;
+}
+void stop()
+{
+	PORTA=0x00;
+}
+
+void init_devices (void) //use this function to initialize all devices
+{
+	cli(); //disable all interrupts
+	motor_init();
+	timer5_init();
+	sei(); //re-enable interrupts
+}
+
+int main(void)
+{
+	/* Replace with your application code */
+	init_devices();
+	velocity (100, 100);
+	while (1)
+	{  
+		forward();
+		
+		//as diameter is 5cm thus to cover 10cm it would require 1.5seconds
+	    
+		/*right_turn();
+		_delay_ms(500);
+		stop();
+		forward();
+		_delay_ms(1500);
+		stop();
+		left_turn();
+		_delay_ms(500);
+		stop();
+		forward();
+		_delay_ms(1500);
+		stop();
+		backward();
+		_delay_ms(1500);
+		stop();*/
+	
+	}
+
+}
