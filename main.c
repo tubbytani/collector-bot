@@ -11,10 +11,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-unsigned char ADC_Conversion(unsigned char);
-unsigned char ADC_Value;
-unsigned char sharp, distance, adc_reading;
-unsigned int value;
+
 //Function to configure ports to enable robot's motion
 void motion_pin_config (void) 
 {
@@ -116,13 +113,7 @@ void stop (void)
 {
   motion_set(0x00);
 }
-void buzzer()
-{
-DDRB=0x01;
-PORTB=0x01;
-_delay_ms(5000);
-PORTB=0x00;	
-}
+
 void init_devices (void) //use this function to initialize all devices
 {
  cli(); //disable all interrupts
