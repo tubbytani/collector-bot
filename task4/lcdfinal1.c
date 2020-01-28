@@ -38,9 +38,9 @@ void motors_delay();
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
 unsigned char flag = 0;
-unsigned char Left_white_line = 0;
-unsigned char Center_white_line = 0;
-unsigned char Right_white_line = 0;
+unsigned char left_sensor = 0;
+unsigned char center_sensor = 0;
+unsigned char right_sensor = 0;
 
 //Function to configure LCD port
 void lcd_port_config (void)
@@ -367,9 +367,9 @@ int main()
 	{
         lcd_cursor(1,3);
         
-		Left_white_line = ADC_Conversion(3);	//Getting data of Left WL Sensor
-		Center_white_line = ADC_Conversion(2);	//Getting data of Center WL Sensor
-		Right_white_line = ADC_Conversion(1);	//Getting data of Right WL Sensor
+		left_sensor = ADC_Conversion(3);	//Getting data of Left WL Sensor
+		center_sensor = ADC_Conversion(2);	//Getting data of Center WL Sensor
+		right_sensor = ADC_Conversion(1);	//Getting data of Right WL Sensor
 
 		flag=0;
 
@@ -379,32 +379,16 @@ int main()
 		
 		
 
-		while(Center_white_line>=5)
+		while(center_sensor>=5)
 		{
 			flag=1;
 			forward();
 			velocity(150,145);
-			Center_white_line = ADC_Conversion(2);	
+			center_sensor = ADC_Conversion(2);	
 			
 		}
 		stop();
-/*		if((Left_white_line>0x28) && (flag==0))
-		{
-			flag=1;
-			forward();
-			velocity(130,130);
-		}
-		if((Right_white_line>0x28) && (flag==0))
-		{
-			flag=1;
-			forward();
-			velocity(50,130);
-		}
-		if(Center_white_line>0x28 && Left_white_line>0x28 && Right_white_line>0x28)
-		{
-			forward();
-			velocity(0,0);
-		}
-*/
+
 	}
 }
+
