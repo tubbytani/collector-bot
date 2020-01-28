@@ -383,7 +383,7 @@ int main()
 		{
 			flag=1;
 			forward();
-			velocity(150,100);
+			velocity(150,145);
 			Center_white_line = ADC_Conversion(2);	
 			
 		}
