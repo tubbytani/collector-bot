@@ -338,7 +338,7 @@ void motion_set (unsigned char Direction)
 
 void forward (void) 
 {
-  motion_set (0x06);
+  motion_set (0x05);
 }
 
 void stop (void)
@@ -366,9 +366,7 @@ int main()
 	while(1)
 	{
         lcd_cursor(1,3);
-        lcd_string("FIRE BIRD 5");
-        lcd_cursor(2,1);
-        lcd_string("NEX ROBOTICS IND");
+        
 		Left_white_line = ADC_Conversion(3);	//Getting data of Left WL Sensor
 		Center_white_line = ADC_Conversion(2);	//Getting data of Center WL Sensor
 		Right_white_line = ADC_Conversion(1);	//Getting data of Right WL Sensor
@@ -380,28 +378,28 @@ int main()
 		print_sensor(1,9,1);	//Prints Value of White Line Sensor3
 		
 		
-/*
-		if(Center_white_line<0x28)
+
+		while(Center_white_line>=5)
 		{
 			flag=1;
 			forward();
-			velocity(150,150);
+			velocity(150,100);
+			Center_white_line = ADC_Conversion(2);	
+			
 		}
-
-		if((Left_white_line>0x28) && (flag==0))
+		stop();
+/*		if((Left_white_line>0x28) && (flag==0))
 		{
 			flag=1;
 			forward();
-			velocity(130,50);
+			velocity(130,130);
 		}
-
 		if((Right_white_line>0x28) && (flag==0))
 		{
 			flag=1;
 			forward();
 			velocity(50,130);
 		}
-
 		if(Center_white_line>0x28 && Left_white_line>0x28 && Right_white_line>0x28)
 		{
 			forward();
