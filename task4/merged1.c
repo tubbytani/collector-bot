@@ -30,7 +30,6 @@ unsigned int hundred;
 unsigned int thousand;
 unsigned int million;
 
-
 void port_init();
 void timer5_init();
 void velocity(unsigned char, unsigned char);
