@@ -1,0 +1,349 @@
+#include "CB_Task_1_Sandbox.h"
+#include<iostream>
+#include<list>
+#include<stdbool.h>
+#include <vector>
+#include <queue>
+std::list<int> queue;
+using namespace std;
+std::vector<int>adj[];
+int dist[];
+int pred[];
+const int v = 12;
+int s;
+class Graph
+{
+	int V;    // No. of vertices
+	list<int>* adj;  // adjacency lists
+public:
+	int arr[20], i;
+	Graph(int V);  // Constructor
+	void addEdge(int v, int w, int weight); // adds an edge
+
+	// finds shortest path from source vertex ‘s’ to
+	// destination vertex ‘d’.
+	int findShortestPath(int s, int d);
+
+	// print shortest path from a source vertex ‘s’ to
+	// destination vertex ‘d’.
+	int printShortestPath(int parent[], int s, int d);
+};
+
+Graph::Graph(int V)
+{
+	this->V = V;
+	adj = new list<int>[2 * V];
+}
+
+void Graph::addEdge(int v, int w, int weight)
+{
+	// split all edges of weight 2 into two
+	// edges of weight 1 each.  The intermediate
+	// vertex number is maximum vertex number + 1,
+	// that is V.	
+	if (weight == 2)
+	{
+		adj[v].push_back(v + V);
+		adj[v + V].push_back(w);
+	}
+	else // Weight is 1
+		adj[v].push_back(w); // Add w to v’s list.
+}
+
+// To print the shortest path stored in parent[]
+int Graph::printShortestPath(int parent[], int s, int d)
+{
+	static int level = 0;
+	int dest_arr[20];
+	// If we reached root of shortest path tree
+	if (parent[s] == -1)
+	{
+		cout << "\n Shortest Path between " << s << " and "
+			<< d << " is " << s << " ";
+		level++;
+		//cout << "\n" << dest_arr[s];
+		
+		return level;
+		
+		
+		
+		
+		
+	}
+
+	printShortestPath(parent, parent[s], d);
+	level++;
+	
+	if (s < V)
+		cout << s << " ";
+	//cout << "\n" << dest_arr[s];
+	return level;
+	//return dest_arr[level];
+}
+
+// This function mainly does BFS and prints the
+// shortest path from src to dest. It is assumed
+// that weight of every edge is 1
+int Graph::findShortestPath(int src, int dest)
+{
+	// Mark all the vertices as not visited
+	bool* visited = new bool[2 * V];
+	int* parent = new int[2 * V];
+
+	// Initialize parent[] and visited[]
+	for (int i = 0; i < 2 * V; i++)
+	{
+		visited[i] = false;
+		parent[i] = -1;
+	}
+
+	// Create a queue for BFS
+	list<int> queue;
+
+	// Mark the current node as visited and enqueue it
+	visited[src] = true;
+	queue.push_back(src);
+
+	// 'i' will be used to get all adjacent vertices of a vertex
+	list<int>::iterator i;
+
+	while (!queue.empty())
+	{
+		// Dequeue a vertex from queue and print it
+		int s = queue.front();
+
+		if (s == dest)
+			return printShortestPath(parent, s, dest);
+
+		queue.pop_front();
+
+		// Get all adjacent vertices of the dequeued vertex s
+		// If a adjacent has not been visited, then mark it
+		// visited and enqueue it
+		for (i = adj[s].begin(); i != adj[s].end(); ++i)
+		{
+			if (!visited[*i])
+			{
+				visited[*i] = true;
+				queue.push_back(*i);
+				parent[*i] = s;
+			}
+		}
+	}
+}	//Nodes defined for path planning
+	/* ---------------------------------------------------
+	   |                       |                         |
+	   |                      15                         |
+	9----10                                           11---12
+	   |        _     _     _     _         _            |
+	---14------     ----     ----     ----    ----------16---
+	   |                                                 |
+	5-----6                                           7-----8
+	   |      _____________________________________      |                                 
+	---13--                                           ---17---
+	   |      _____________________________________      |                                
+	1-----2                                           3------4
+	   |                       0                         |
+	   |                       |                         |
+	   ---------------------------------------------------
+	*/
+	Graph g(v);
+	g.addEdge(0, 1, 1);
+	g.addEdge(0, 2, 1);
+	g.addEdge(0, 3, 1);
+	g.addEdge(0, 4, 1);
+	g.addEdge(1, 2, 1);
+	g.addEdge(1, 13, 1);
+	//g.addEdge(1, 0, 1);
+	g.addEdge(2, 1, 1);
+	//g.addEdge(2, 0, 1);
+	g.addEdge(2, 13, 1);
+	g.addEdge(3, 4, 1);
+	//g.addEdge(3, 0, 1);
+	g.addEdge(3, 17, 1);
+	g.addEdge(4, 17, 1);
+	g.addEdge(4, 3, 1);
+	//g.addEdge(4, 0, 1);
+	g.addEdge(13, 17, 1);
+	g.addEdge(13, 5, 1); 
+	g.addEdge(13, 6, 1);
+	g.addEdge(13, 1, 1);
+	g.addEdge(13, 2, 1);
+	g.addEdge(17, 7, 1);
+	g.addEdge(17, 8, 1);
+	g.addEdge(17, 3, 1);
+	g.addEdge(17, 4, 1);
+	g.addEdge(5, 6, 1);
+	g.addEdge(5, 14, 1);
+	g.addEdge(5, 13, 1);
+	g.addEdge(6, 14, 1);
+	g.addEdge(6, 5, 1);
+	g.addEdge(6, 13, 1);
+	g.addEdge(7, 8, 1);
+	g.addEdge(7, 16, 1);
+	g.addEdge(7, 17, 1);
+	g.addEdge(14, 9, 1);
+	g.addEdge(14, 10, 1);
+	g.addEdge(14, 16, 1);
+	g.addEdge(14, 5, 1);
+	g.addEdge(14, 6, 1);
+	g.addEdge(16, 11, 1);
+	g.addEdge(16, 12, 1);
+	g.addEdge(16, 14, 1);
+	g.addEdge(16, 7, 1);
+	g.addEdge(16, 8, 1);
+	g.addEdge(9, 10, 1);
+	g.addEdge(9, 15, 1);
+	g.addEdge(9, 14, 1);
+	g.addEdge(10, 9, 1);
+	g.addEdge(10, 15, 1);
+	g.addEdge(10, 14, 1);
+	g.addEdge(11, 12, 1);
+	g.addEdge(11, 15, 1);
+	g.addEdge(11, 16, 1);
+	g.addEdge(12, 11, 1);
+	g.addEdge(12, 15, 1);
+	g.addEdge(12, 16, 1);
+	g.addEdge(15, 9, 1);
+	g.addEdge(15, 10, 1);
+	g.addEdge(15, 11, 1);
+	g.addEdge(15, 12, 1);
+
+
+	int arr[20];
+	int i = 0;
+	//1st pick up
+	int src = 0, dest = 3;
+	arr[i] = 0;
+	
+
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//1st drop
+	src = 3;
+	dest = 13;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//2nd pick up
+	src = 13;
+	dest = 11;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//2nd drop
+	src = 11;
+	dest = 13;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//3rd pickup
+	src = 13;
+	dest = 4;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//3rd drop
+	src = 4;
+	dest = 14;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//4th pickup
+	src = 14;
+	dest = 7;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//4th drop
+	src = 7;
+	dest = 14;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//5th pickup
+	src = 14;
+	dest = 2;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//5th drop
+	src = 2;
+	dest = 15;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//6th pickup
+	src = 15;
+	dest = 8;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//6th drop
+	src = 8;
+	dest = 15;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//7th pickup
+	src = 15;
+	dest = 1;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//7th drop
+	src = 1;
+	dest = 16;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//8th pickup
+	src = 16;
+	dest = 9;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//8th drop
+	src = 9;
+	dest = 17;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//9th pickup
+	src = 17;
+	dest = 5;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//9th drop
+	src = 5;
+	dest = 17;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+	//back to start
+	src = 17;
+	dest = 0;
+	
+	cout << "\n Shortest Distance between " << src
+		<< " and " << dest << " is "
+		<< g.findShortestPath(src, dest);
+}
