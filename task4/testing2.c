@@ -41,10 +41,10 @@ unsigned char ADC_Value;
 unsigned int value;
 unsigned char sharp=0, distance=0, adc_reading=0;
 unsigned char flag = 0;
-int counter=0;
-int final_array[]={1,2,3};
+int counter=2;
+int final_array[]={1,2,3,4};
 int cm_array[]={1,2,3};
-int i=0;
+int i=3;
 unsigned char left_sensor = 0;
 unsigned char center_sensor = 0;
 unsigned char right_sensor = 0;
@@ -415,12 +415,19 @@ void fwd_wls(void)
 	center_sensor = ADC_Conversion(2);
 
 	//for l shape
-	while (center_sensor>=5)
+	if (center_sensor>=5)
 	{
+	while (left_sensor<=5&& right_sensor<=5)
+	{ 
 		forward();
-		center_sensor = ADC_Conversion(2);
+		if(left_sensor<=5&& right_sensor<=5 && center_sensor<=5)
+		{
+			stop();
+		}
 	}
+	
 	stop();
+	}
 }
 void wall()
 {////somethins wrong
@@ -551,6 +558,8 @@ void zap()
 		
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
+		print_sensor(3,3,5);
+		print_sensor(3,3,4);
 		if(lvalue<50)
 		{
 			right();
@@ -596,7 +605,7 @@ void fwd(void)
 	while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 	{
 		forward();
-		_delay_ms(10);//---------idhar ka sure ni ki delay ayega
+		_delay_ms(15);//---------idhar ka sure ni ki delay ayega
 		left_sensor = ADC_Conversion(1);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
@@ -605,8 +614,7 @@ void fwd(void)
 		{
 			while ((center_sensor <5) && (left_sensor <5))
 			{
-				soft_right();
-			
+				right();
 				left_sensor = ADC_Conversion(1);
 				right_sensor = ADC_Conversion(3);
 				center_sensor = ADC_Conversion(2);
@@ -620,16 +628,14 @@ center_sensor = ADC_Conversion(2);
 		{
 			while ((center_sensor <5) && (right_sensor<5))
 			{
-				soft_left();
+				left();
 				
-				//_delay_ms(150);
 				left_sensor = ADC_Conversion(1);
 				right_sensor = ADC_Conversion(3);
 				center_sensor = ADC_Conversion(2);
 			}
 			stop();
 		}
-		lcd_string("hello");
 		left_sensor = ADC_Conversion(1);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
@@ -640,15 +646,41 @@ center_sensor = ADC_Conversion(2);
 			right_sensor = ADC_Conversion(3);
 			center_sensor = ADC_Conversion(2);
 		}
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
 		while ((left_sensor >=5) && (right_sensor >=5) && (center_sensor >=5))
-		{
+		{   lcd_string("node");
 			counter++;
+			//i++;
 			forward();
-			_delay_ms(10);
+			_delay_ms(5);
+			stop();
+			
+			if(final_array[i]>counter)
+			{   right();
+				_delay_ms(700);
+				stop();
+				if(right_sensor>=5||center_sensor>=5)
+			{
+				fwd();
+			}
+			else
+			{
+				left();
+				_delay_ms(1400);
+				if(left_sensor>=5||center_sensor>=5)
+				{
+					fwd();
+				}
+			}
+			stop();
+			}
 			stop();
 			zap();
-			white_line();
+			/*white_line();
 			break;//return;
+			*/
 		}
 	}
 }
@@ -808,10 +840,11 @@ int main()
 		while(1)
 		{   _delay_ms(3000);
 			print_sensor(1,5,2);
+			//fwd_wls();
 				forward();
 				_delay_ms(1100);
 			right();
-			_delay_ms(730);
+			_delay_ms(700);
 			stop();
 			_delay_ms(2000);
 			print_sensor(2,5,2);	//Prints Value of White Line Sensor2
