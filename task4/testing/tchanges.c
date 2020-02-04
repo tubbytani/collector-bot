@@ -44,7 +44,7 @@ unsigned char flag = 0;
 int counter=2;
 int final_array[]={1,2,3,4,0,15};
 int new_array[]={1,2,3,4,5,15};
-
+int house_array[]={1,2,3,4,5,13};
 int cm_array[]={1,2,3};
 int i=3;
 unsigned char left_sensor = 0;
@@ -523,45 +523,61 @@ void dash()
 }
 void boom(void)
 {
-	if (final_array[i]<cm_array[i])
+	if (final_array[i]>house_array[i])
 	{
 		if (flag==0)
-		{
+		{   forward();
+			_delay_ms(50);
+			stop();
 			left();
 			_delay_ms(600);
 			stop();
 			counter--;
 		}
 		else
-		{
+		{   forward();
+			_delay_ms(50);
+			stop();
 			right();
 			_delay_ms(600);
 			stop();
 			counter++;
 		}
 	}
-	if(final_array[i]>cm_array[i])
+	if(final_array[i]<house_array[i])
 	{
 		if (flag==0)
-		{
+		{   forward();
+			_delay_ms(50);
+			stop();
 			right();
 			_delay_ms(600);
 			stop();
 			counter--;
 		}
 		else
-		{
+		{   forward();
+			_delay_ms(50);
+			stop();
 			left();
 			_delay_ms(600);
 			stop();
 			counter++;
 		}
 	}
+	zoom();//-----abhi kiya
 }
 void zap()
 { if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
 	{
-		
+		if( (final_array[i]==5)&& (final_array[i+1]==15) )
+		{
+			counter=15;
+		}
+		else
+		{
+			counter=5;
+		}
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
 		print_sensor(3,3,5);
@@ -584,7 +600,15 @@ void zap()
 		boom();
 	}
 	if ( ((final_array[i]==7)&&((final_array[i+1])==13))||((final_array[i]==13)&&((final_array[i+1])==7)))
-	{
+	{  
+		if( (final_array[i]==7)&& (final_array[i+1]==13) )
+		{
+			counter=13;
+		}
+		else
+		{
+			counter=7;
+		}
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
 		if(lvalue<50)
@@ -761,9 +785,15 @@ void white_line(void)
 	}	
 }
 void zoom(void)
-{ while (counter!=0)//--------this is wrong
-	{
+{ 
+	while (counter!=house_array[i])
+	{   
 		fwd();
+		i++;
+		counter=counter-1;
+		
+
+	}
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
 		if(lvalue<50)
@@ -772,7 +802,7 @@ void zoom(void)
 			_delay_ms(600);
 			stop();
 			forward();
-			_delay_ms(100);
+			_delay_ms(50);
 			stop();
 			place();
 		}
@@ -782,11 +812,11 @@ void zoom(void)
 			_delay_ms(600);
 			stop();
 			forward();
-			_delay_ms(100);
+			_delay_ms(50);
 			stop();
 			place();
 		}
-	}
+	
 }
 void bam(void)
 {
