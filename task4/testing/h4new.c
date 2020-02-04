@@ -1,3 +1,4 @@
+
 #define F_CPU 14745600
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -654,7 +655,6 @@ center_sensor = ADC_Conversion(2);
 		while ((left_sensor >=5) && (right_sensor >=5) && (center_sensor >=5))
 		{  
 			counter++;
-			//i++;
 			forward();
 			_delay_ms(5);
 			stop();
@@ -678,12 +678,15 @@ center_sensor = ADC_Conversion(2);
 					fwd();
 				}
 			}//bam
-			else
-			{  if((final_array[i]>counter))
-				{ while (final_array[i]>counter)
-				  {fwd();}
+			
+			  if(final_array[i]>counter)
+				{
+					 while (final_array[i]>counter)
+				  {
+					  fwd();
+				  }
 				}
-			}
+			
 			stop();
 			}
 			stop();
