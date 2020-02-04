@@ -1,3 +1,10 @@
+
+ /* GccApplication13.c
+ *
+ * Created: 1/31/2020 11:12:30 PM
+ * Author : new
+ */ 
+
 #define F_CPU 14745600
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -36,15 +43,16 @@ void motors_delay();
 void white_line(void);
 void fwd(void);
 void bam(void);
+void zoom(void);
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
 unsigned int value;
 unsigned char sharp=0, distance=0, adc_reading=0;
 unsigned char flag = 0;
 int counter=2;
-int final_array[]={1,2,3,4,0,15};
+int final_array[]={1,2,3,4,0,15,14,13,7};
 int new_array[]={1,2,3,4,5,15};
-int house_array[]={1,2,3,4,5,13};
+int house_array[]={1,2,3,4,5,13,0,0,0,6};
 int cm_array[]={1,2,3};
 int i=3;
 unsigned char left_sensor = 0;
@@ -624,9 +632,11 @@ void zap()
 			stop();
 		}
 		fwd();
+		counter--;
 		dash();
 		boom();	
 	}
+	return;
 }
 void fwd(void)
 {
@@ -805,6 +815,10 @@ void zoom(void)
 			_delay_ms(50);
 			stop();
 			place();
+			right();
+			_delay_ms(1200);
+			stop();
+			
 		}
 		if(rvalue<50)
 		{
@@ -816,7 +830,23 @@ void zoom(void)
 			stop();
 			place();
 		}
-	
+		
+		zap();
+	if(final_array[i]-counter>0)
+	{
+		left();
+		_delay_ms(600);
+		stop();
+		bam();
+	}
+	else
+	if(counter-final_array[i]==1)
+	{
+	right();
+	_delay_ms(600);
+	stop();
+	bam();
+	}
 }
 void bam(void)
 {
