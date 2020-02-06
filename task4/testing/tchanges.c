@@ -1,10 +1,4 @@
 
- /* GccApplication13.c
- *
- * Created: 1/31/2020 11:12:30 PM
- * Author : new
- */ 
-
 #define F_CPU 14745600
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -44,6 +38,8 @@ void white_line(void);
 void fwd(void);
 void bam(void);
 void zoom(void);
+void fwd1(void);
+
 unsigned char ADC_Conversion(unsigned char);
 unsigned char ADC_Value;
 unsigned int value;
@@ -52,9 +48,10 @@ unsigned char flag = 0;
 int counter=2;
 int final_array[]={1,2,3,4,0,15,14,13,7};
 int new_array[]={1,2,3,4,5,15};
-int house_array[]={1,2,3,4,5,13,0,0,0,6};
-int cm_array[]={1,2,3};
+int house_array[]={1,2,3,4,5,13,0,0,6};
+int cm_array[]={1,2,3,4};
 int i=3;
+int j=0;
 unsigned char left_sensor = 0;
 unsigned char center_sensor = 0;
 unsigned char right_sensor = 0;
@@ -440,7 +437,7 @@ void fwd_wls(void)
 	}
 }
 void wall()
-{////somethins wrong
+{
 	center_sensor= ADC_Conversion(2);
 	rvalue= ADC_Conversion(5);
 	lvalue = ADC_Conversion(4);
@@ -499,7 +496,7 @@ void dash()
 			while ((center_sensor <=4) && (left_sensor<=4))
 			{
 				soft_right();
-				_delay_ms(600);
+				_delay_ms(100);
 				stop();
 				left_sensor = ADC_Conversion(1);
 				right_sensor = ADC_Conversion(3);
@@ -513,7 +510,7 @@ void dash()
 			while ((center_sensor <=4) && (right_sensor<=4))
 			{
 				soft_left();
-				_delay_ms(600);
+				_delay_ms(100);
 				stop();
 				left_sensor = ADC_Conversion(1);
 				right_sensor = ADC_Conversion(3);
@@ -523,7 +520,8 @@ void dash()
 		if ((center_sensor >=5) && (right_sensor>=5) && (left_sensor>=5))
 		{
 			while ((center_sensor>=5) && (right_sensor>=5) && (left_sensor>=5))
-			{
+			{   
+				i++;
 				return;
 			}
 		}
@@ -540,7 +538,7 @@ void boom(void)
 			left();
 			_delay_ms(600);
 			stop();
-			counter--;
+			//counter--;
 		}
 		else
 		{   forward();
@@ -561,7 +559,7 @@ void boom(void)
 			right();
 			_delay_ms(600);
 			stop();
-			counter--;
+			//counter--;
 		}
 		else
 		{   forward();
@@ -573,7 +571,16 @@ void boom(void)
 			counter++;
 		}
 	}
-	zoom();//-----abhi kiya
+	if((cm_array[j]==1)||(cm_array[j]==3))
+	{
+	zoom();	
+	}
+	if((cm_array[j]==2)||(cm_array[j]==4))
+	{
+		i++;
+		bam();
+	}
+	
 }
 void zap()
 { if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
@@ -605,6 +612,7 @@ void zap()
 		wall();
 		i++;
 		fwd();
+		counter--;
 		boom();
 	}
 	if ( ((final_array[i]==7)&&((final_array[i+1])==13))||((final_array[i]==13)&&((final_array[i+1])==7)))
@@ -615,9 +623,9 @@ void zap()
 		}
 		else
 		{
-			counter=7;
+			counter=7; flag=0;
 		}
-		lvalue=ADC_Conversion(5);
+		/*lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
 		if(lvalue<50)
 		{
@@ -630,7 +638,10 @@ void zap()
 			left();
 			_delay_ms(600);
 			stop();
-		}
+		}*/
+		forward();
+		_delay_ms(40);
+		stop();
 		fwd();
 		counter--;
 		dash();
@@ -730,6 +741,103 @@ center_sensor = ADC_Conversion(2);
 				stop();
 				zap();
 			}
+			return;
+			/*white_line();*/
+		}
+	}
+}
+void fwd1(void)
+{
+	left_sensor = ADC_Conversion(1);
+	right_sensor = ADC_Conversion(3);
+	center_sensor = ADC_Conversion(2);
+	while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
+	{
+		forward();
+		_delay_ms(15);//---------idhar ka sure ni ki delay ayega
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
+
+		if ((center_sensor <5) && (left_sensor <5))
+		{
+			while ((center_sensor <5) && (left_sensor <5))
+			{
+				right();
+				left_sensor = ADC_Conversion(1);
+				right_sensor = ADC_Conversion(3);
+				center_sensor = ADC_Conversion(2);
+			}
+			stop();
+		}
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
+		if ((center_sensor <5) && (right_sensor <5))
+		{
+			while ((center_sensor <5) && (right_sensor<5))
+			{
+				left();
+				
+				left_sensor = ADC_Conversion(1);
+				right_sensor = ADC_Conversion(3);
+				center_sensor = ADC_Conversion(2);
+			}
+			stop();
+		}
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
+		while((center_sensor<5)&&(right_sensor<5)&&(left_sensor<5))
+		{
+			stop();
+			left_sensor = ADC_Conversion(1);
+			right_sensor = ADC_Conversion(3);
+			center_sensor = ADC_Conversion(2);
+		}
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
+		while ((left_sensor >=5) && (right_sensor >=5) && (center_sensor >=5))
+		{
+			counter--;
+			forward();
+			_delay_ms(5);
+			stop();
+			if (counter==3||9||11||17)  //if(final_array[i]>counter)//counter compare
+			{   forward();
+				_delay_ms(100);
+				stop();
+				right();
+				_delay_ms(900);
+				stop();
+				if(right_sensor>=5||center_sensor>=5)
+				{
+					fwd1();
+				}
+				else
+				{
+					left();
+					_delay_ms(1400);
+					if(left_sensor>=5||center_sensor>=5)
+					{
+						fwd1();
+					}
+				}
+				
+				stop();
+			}
+			stop();
+			soft_right();
+			_delay_ms(5);
+			stop();
+			//return;
+			if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
+			{   forward();
+				_delay_ms(200);
+				stop();
+				zap();
+			}
 			return;//----------------------noooooooooooooooooooooooooooooooooooo bam m go
 			/*white_line();*/
 		}
@@ -798,11 +906,8 @@ void zoom(void)
 { 
 	while (counter!=house_array[i])
 	{   
-		fwd();
-		i++;
-		counter=counter-1;
-		
-
+		fwd1();
+		i++;	
 	}
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
@@ -814,12 +919,14 @@ void zoom(void)
 			forward();
 			_delay_ms(50);
 			stop();
+			j++;
 			place();
 			right();
 			_delay_ms(1200);
 			stop();
 			
 		}
+		else
 		if(rvalue<50)
 		{
 			right();
@@ -828,11 +935,20 @@ void zoom(void)
 			forward();
 			_delay_ms(50);
 			stop();
+			j++;
 			place();
+		}
+		else
+		{   
+			forward();
+			_delay_ms(100);
+			stop();
+			place();
+			buzzer();
 		}
 		
 		zap();
-	if(final_array[i]-counter>0)
+	/*if(final_array[i]-counter>0)
 	{
 		left();
 		_delay_ms(600);
@@ -840,21 +956,24 @@ void zoom(void)
 		bam();
 	}
 	else
-	if(counter-final_array[i]==1)
+	if(counter-final_array[i]<0)
 	{
 	right();
 	_delay_ms(600);
 	stop();
 	bam();
-	}
+	}*/
 }
 void bam(void)
 {
-	while (counter!=final_array[i])
+	while ( (counter!=final_array[i])&&(j==0||j==1) )
 	{
 		fwd();
 	}
-	
+	while( (counter!=final_array[i])&&(j==2||j==3) )
+	{
+		fwd1();
+	}
 	forward();
 	_delay_ms(5);
 	stop();
@@ -887,6 +1006,7 @@ void bam(void)
 			stop();
 			flag=0;
 			pick();
+			j++;
 			_delay_ms(50);
 			left();
 			_delay_ms(800);
