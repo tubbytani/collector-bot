@@ -5,6 +5,7 @@
  * Author : kunal
  */ 
 
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -126,15 +127,15 @@ void servo_3_free (void) //makes servo 3 free rotating
 //Main function
 void main(void)
 {
- unsigned char i = 120,j=150,k=50;
+ unsigned char i = 120,j=150,k=100;
  init_devices();
  
 
  	
- for (i = 120; i >30; i--)
+ for (i = 120; i >40; i--)
  {
   servo_1(i);
-  _delay_ms(500);
+  _delay_ms(300);
  }
  for(j=150; j>80;j--)
  {
@@ -145,7 +146,13 @@ void main(void)
  {
  servo_3(k);
   _delay_ms(300);
+ } 
+	 for(i=40; i<120;i++)
+ {
+	 servo_1(i);
+	 _delay_ms(500);
  }
+ 
 
 
  _delay_ms(2000);
