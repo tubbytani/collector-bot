@@ -121,35 +121,35 @@ void servo_3_free (void) //makes servo 3 free rotating
 //Main function
 int main(void)
 {
- unsigned char i = 120,j=150,k=100;
+ unsigned char i = 50,j=150,k=100;
  init_devices();
  
 
  	
- for (i = 120; i >40; i--)
+ for (i = 120; i>20; i--)
  {
   servo_1(i);
-  _delay_ms(300);
+  _delay_ms(100);
  }
  for(j=150; j>80;j--)
  {
   servo_2(j);
-  _delay_ms(250);
+  _delay_ms(100);
  }
  for(k=50;k>5;k--)
  {
  servo_3(k);
-  _delay_ms(300);
+  _delay_ms(100);
  } 
 	 for(i=40; i<120;i++)
  {
 	 servo_1(i);
-	 _delay_ms(500);
+	 _delay_ms(100);
  }
  
  
 
- _delay_ms(2000);
+ _delay_ms(5000);
  servo_1_free(); 
  servo_2_free();
  servo_3_free();
