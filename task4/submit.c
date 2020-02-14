@@ -52,7 +52,7 @@ unsigned char sharp=0, distance=0, adc_reading=0;
 unsigned char flag = 0;
 int counter=2;
 int final_array[]={1,2,3,4,0,13,13,13,7,6,0,15};
-int new_array[]=  {1,2,3,4,7,13,0 ,0 ,6,5,0,0 };
+int new_array[]=  {1,2,3,4,8,13,0 ,0 ,6,5,0,0 };
 int house_array[]={1,2,3,4,5,13,13,13,6,15,15,15};
 int cm_array[]={1,2,3,4};
 int i=3;
@@ -1204,23 +1204,22 @@ void zoom(void)
 void bam(void)
 {
 	
-	while ( (counter!=final_array[i]) )
+	while ( (counter!=final_array[i])&&(j==2||j==3)) 
 	{
 		fwd();
 	
 	}
 	
-
-	/*while( (counter!=final_array[i])&&(j==2||j==3) )
+	while( (counter!=final_array[i])&&(j==2||j==3) )
 	{
 		fwd1();
-	}*/
+	}
 	
 	if (counter==final_array[i])
-	{  		// lcd_string("PICK");
+	{  
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
-		/*if (lvalue<=80)
+		if (lvalue<=80)
 		{
 			left();
 			_delay_ms(200);
@@ -1234,9 +1233,9 @@ void bam(void)
 			counter--;
 			boom();
 			zoom();
-		}*/
+		}
 		
-		//{if (rvalue<=200)
+		{if (rvalue<=200)
 			//print_sensor(1,7,4);
 			//print_sensor(2,7,5);
 			forward();
