@@ -62,7 +62,7 @@ int counter=2;
 int final_array[]={1,2,3,4,5,6,7,13};
 int placearr[]={13,10,5};
 int pickarr[]={6,12,14};
-int cm_array[]={1,2,3,4};
+//int cm_array[]={1,2,3,4};
 int i=1,k=0,v=0;//final array var,pick var,place var
 int j=1;
 int l=0;
@@ -677,15 +677,11 @@ void wall()
    _delay_ms(5000);
    stop();
 */
-	//right();
-	//_delay_ms(40);
-	//stop();
-	//buzzer();
 	
 	return;
 }
-void dash()
-{
+void dash(void)
+{//no counter or variable change in this function
 	
 	left_sensor = ADC_Conversion(1);
 	right_sensor = ADC_Conversion(3);
@@ -799,7 +795,7 @@ void boom(void)
 			_delay_ms(600);
 			stop();
 		}
-		j=1;
+	j=0;
 	}
   if((final_array[i]<placearr[v])&&(flag2==1))
 	{
@@ -810,6 +806,7 @@ void boom(void)
 			left();
 			_delay_ms(600);
 			stop();
+			j=0;
 		}
 		else
 		{   forward();
@@ -818,27 +815,24 @@ void boom(void)
 			right();
 			_delay_ms(600);
 			stop();
+			j=1;
 		}
-		j=0;
+		
+	}
+	if(final_array[i]==10)
+	{
+		return;
 	}
 	if(flag2==0)
 	{
 		 bam();
 	}
 	else zoom();
-	/*if((cm_array[j]==1)||(cm_array[j]==3))
-	{
-	zoom();	
-	}
-	if((cm_array[j]==2)||(cm_array[j]==4))
-	{
-		i++;
-		bam();
-	}*/
 	
 }
-void zap()
-{ if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
+void zap(void)
+{
+	 if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
 	{
 		if( (final_array[i]==5)&& (final_array[i+1]==15) )
 		{
@@ -866,12 +860,23 @@ void zap()
 			stop();
 			
 		}
-		/*else
-		{
+		if(rvalue<=50)
+		{ lcd_string("zap");
 			left();
-			_delay_ms(300);
+			_delay_ms(455);
 			stop();
-		}*/
+			forward();
+			_delay_ms(600);
+			stop();
+			left();
+			_delay_ms(10);
+			stop();
+			forward();
+			_delay_ms(1000);
+			stop();
+			
+		}
+		
 		wall();
 		i++;
 		fwd();
@@ -896,7 +901,7 @@ void zap()
 			_delay_ms(450);
 			stop();
 		}
-		else
+		 if(rvalue<50)
 		{
 			left();
 			_delay_ms(450);
@@ -920,7 +925,7 @@ void fwd(void)
 	while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 	{
 		forward();
-		_delay_ms(15);//---------idhar ka sure ni ki delay ayega
+		_delay_ms(15);
 		left_sensor = ADC_Conversion(1);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
@@ -936,9 +941,9 @@ void fwd(void)
 			}
 			stop();
 		}
-left_sensor = ADC_Conversion(1);
-right_sensor = ADC_Conversion(3);
-center_sensor = ADC_Conversion(2);
+		left_sensor = ADC_Conversion(1);
+		right_sensor = ADC_Conversion(3);
+		center_sensor = ADC_Conversion(2);
 		if ((center_sensor <5) && (right_sensor <5))
 		{
 			while ((center_sensor <5) && (right_sensor<5))
@@ -960,7 +965,7 @@ center_sensor = ADC_Conversion(2);
 			left();
 			_delay_ms(5);
 			stop();
-	        
+			
 			left_sensor = ADC_Conversion(1);
 			right_sensor = ADC_Conversion(3);
 			center_sensor = ADC_Conversion(2);
@@ -969,14 +974,14 @@ center_sensor = ADC_Conversion(2);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
 		while ((left_sensor >=5) && (right_sensor >=5) && (center_sensor >=5))
-		{  
+		{
 			lcd_string("N_");
 			counter++;
 			i++;
 			forward();
 			_delay_ms(200);
 			stop();
-			if ((counter==3||9||11||17)&&(j==1)) 
+			if (counter==3||9||11||17)
 			{   forward();
 				_delay_ms(60);
 				stop();
@@ -984,58 +989,54 @@ center_sensor = ADC_Conversion(2);
 				_delay_ms(615);
 				stop();
 				left();
-				_delay_ms(5);
-				stop();
-				    if(right_sensor>=5||center_sensor>=5)
-			        {
-			        	fwd();
-			        }
-			       else
-			      {
-				   left();
-				   _delay_ms(1200);
-				   stop();
-				if(left_sensor>=5||center_sensor>=5)
-				{
-					fwd();
-				}
-			}
-			}
-			if ((counter==3||9||11||17)&&(j==0))  
-			{   forward();
-				_delay_ms(60);
-				stop();
-				left();
-				_delay_ms(615);
-				stop();
-				right();
 				_delay_ms(5);
 				stop();
 				//velocity(120,110);
-				if(right_sensor>=5||center_sensor>=5)
+				if((counter==3)||(counter==5)||(counter==11)||(counter==9)&&(final_array[i+1]!=10))
 				{
-					fwd();
-				}
-				else
-				{
-					left();
-					_delay_ms(1200);
-					stop();
-					if(left_sensor>=5||center_sensor>=5)
+					
+					if(right_sensor>=5||center_sensor>=5)
+					{fwd();}
+					else
 					{
-						fwd();
+						left();
+						_delay_ms(1200);
+						stop();
+						if(left_sensor>=5||center_sensor>=5)
+						{fwd();}
+					}
+					
+				}
+				if(((counter==11)||(counter==9))&&(final_array[i+1]==10))
+				{
+					if(right_sensor>=5||center_sensor>=5)
+					{white_line();}
+					else
+					{
+						left();
+						_delay_ms(1200);
+						stop();
+						if(left_sensor>=5||center_sensor>=5)
+						{
+							white_line();
+						}
 					}
 				}
 			}
-			 if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5))||((final_array[i]==13)&&((final_array[i+1])==7))||((final_array[i]==7)&&((final_array[i+1])==13))  )
+			
+			
+			if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5))||((final_array[i]==13)&&((final_array[i+1])==7))||((final_array[i]==7)&&((final_array[i+1])==13))  )
 			{   velocity(120,110);
 				forward();
 				_delay_ms(200);
 				stop();
 				zap();
 			}
+			if( ((final_array[i]==11)&&(final_array[i+1]=10))|| ((final_array[i]==9)&&(final_array[i+1]=10)))
+			{white_line();}
 			return;
 		}
+
 	}
 }
 void fwd1(void)
@@ -1095,15 +1096,14 @@ while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 	right_sensor = ADC_Conversion(3);
 	center_sensor = ADC_Conversion(2);
 	while ((left_sensor >=5) && (right_sensor >=5) && (center_sensor >=5))
-	{  //print_sensor(1,1,4);
-		//print_sensor(2,1,5);
+	{  
 		lcd_string("N_");
 		counter--;
 		i++;
 		forward();
 		_delay_ms(200);
 		stop();
-		if ((counter==3||9||11||17)&&(j==0))  //if(final_array[i]>counter)//counter compare
+		if (counter==3||9||11||17) 
 		{   forward();
 			_delay_ms(60);
 			stop();
@@ -1114,36 +1114,25 @@ while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 			_delay_ms(5);
 			stop();
 			//velocity(120,110);
-			if(right_sensor>=5||center_sensor>=5)
+			if((counter==3)||(counter==5))
 			{
-				fwd();
-			}
-			else
-			{
+				
+			     if(right_sensor>=5||center_sensor>=5)
+			     {fwd();}
+			    else
+			    {
 				left();
 				_delay_ms(1200);
 				stop();
 				if(left_sensor>=5||center_sensor>=5)
-				{
-					fwd();
-				}
+				{fwd();}
+			    }
+		
 			}
-		}
-			if ((counter==3||9||11||17)&&(j==1))  //if(final_array[i]>counter)//counter compare
-			{   forward();
-				_delay_ms(60);
-				stop();
-				left();
-				_delay_ms(615);
-				stop();
-				right();
-				_delay_ms(5);
-				stop();
-				//velocity(120,110);
+			if((counter==11)||(counter==9))
+			{
 				if(right_sensor>=5||center_sensor>=5)
-				{
-					fwd();
-				}
+				{white_line();}
 				else
 				{
 					left();
@@ -1151,10 +1140,13 @@ while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 					stop();
 					if(left_sensor>=5||center_sensor>=5)
 					{
-						fwd();
+						white_line();
 					}
-				}
+				}	
 			}
+		}
+			
+				
 		if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5))||((final_array[i]==13)&&((final_array[i+1])==7))||((final_array[i]==7)&&((final_array[i+1])==13))  )
 		{   velocity(120,110);
 			forward();
@@ -1162,68 +1154,151 @@ while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 			stop();
 			zap();
 		}
-		if( ((final_array[i]==11)&&(final_array[i+1]=10))|| ((final_array[i]==9)&&(final_array[i+1]=10)))
-		{
-			white_line();
-		}
+		   // if( ((final_array[i]==11)&&(final_array[i+1]=10))|| ((final_array[i]==9)&&(final_array[i+1]=10)))
+		   //{white_line();}
 		return;
-	}
+	  }
+
+
+
 }	
 }
 void white_line(void)
 {
-		
 		left_sensor = ADC_Conversion(1);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
-		if((left_sensor>=5)||(right_sensor>=5)||(center_sensor>=5))
+		while (((left_sensor >=5) || (right_sensor >=5) )&&(center_sensor >=5))
 		{
-			counter++;
-			//fwd_wls();
-		}
-		else
-		{
-			counter++;
-			right();
-			_delay_ms(1200);
-			stop();
-		}
-		//fwd_wls();
-	
-	left_sensor = ADC_Conversion(1);
-	right_sensor = ADC_Conversion(3);
-	center_sensor = ADC_Conversion(2);
-	if ((right_sensor>=5) && (left_sensor>=5) && (center_sensor>=5))
-	{
-		while((right_sensor<5)||(left_sensor<5))
-		{
-			fwd();
+			forward();
+			_delay_ms(15);
 			left_sensor = ADC_Conversion(1);
 			right_sensor = ADC_Conversion(3);
 			center_sensor = ADC_Conversion(2);
-		}
-		if((center_sensor<5) && (left_sensor<5) && (right_sensor<5))
-		{
-			counter++;
-		}
-		if(final_array[i]==10)
-		{
-			if(right_sensor<5)
+
+			if ((center_sensor <5) && (left_sensor <5))
 			{
-				right();
-				_delay_ms(600);
+				while ((center_sensor <5) && (left_sensor <5))
+				{
+					right();
+					left_sensor = ADC_Conversion(1);
+					right_sensor = ADC_Conversion(3);
+					center_sensor = ADC_Conversion(2);
+				}
 				stop();
 			}
-			else
+			left_sensor = ADC_Conversion(1);
+			right_sensor = ADC_Conversion(3);
+			center_sensor = ADC_Conversion(2);
+			if ((center_sensor <5) && (right_sensor <5))
 			{
-				left();
-				_delay_ms(600);
+				while ((center_sensor <5) && (right_sensor<5))
+				{
+					left();
+					
+					left_sensor = ADC_Conversion(1);
+					right_sensor = ADC_Conversion(3);
+					center_sensor = ADC_Conversion(2);
+				}
+				stop();
 			}
-			stop();
-			place();
-		}	//end m v++ nd counter nd final array ki value 10 honi chahie after place ...isme boom ka use bhi hoga then call bam after place
 		}
-	}
+			left_sensor = ADC_Conversion(1);
+			right_sensor = ADC_Conversion(3);
+			center_sensor = ADC_Conversion(2);
+			while(((center_sensor<5)&&(right_sensor>=5)&&(left_sensor>=5)))
+			{
+				forward();
+				_delay_ms(10);
+				stop();
+				left_sensor = ADC_Conversion(1);
+				right_sensor = ADC_Conversion(3);
+				center_sensor = ADC_Conversion(2);
+				
+				if((center_sensor>=5) && (right_sensor>=5))
+				{
+					while((center_sensor>=5) && (right_sensor>=5))
+					{
+						left();
+						left_sensor = ADC_Conversion(1);
+						right_sensor = ADC_Conversion(3);
+						center_sensor = ADC_Conversion(2);
+					}
+					stop();
+				}
+				if((center_sensor>=5) && (left_sensor>=5))
+				{
+					while((center_sensor>=5) && (left_sensor>=5))
+					{
+						right();
+						left_sensor = ADC_Conversion(1);
+						right_sensor = ADC_Conversion(3);
+						center_sensor = ADC_Conversion(2);
+					}
+					stop();
+				}
+				
+			}
+			while(center_sensor<5&&right_sensor<5&&left_sensor<5)
+			{
+				if(j==1)
+				{
+					counter++;
+				}
+				else
+				counter--;
+				i++;
+			
+			if(placearr[v]==10)
+			{   forward();
+				_delay_ms(30);
+				stop();
+				if(j==1)
+				{  
+					right();
+					_delay_ms(600);
+					stop();
+				}
+				else
+				{
+					left();
+					_delay_ms(600);
+					stop();
+				}
+					place();
+					flag2=0;
+					v++;
+					right();
+					_delay_ms(1200);
+					boom();
+					white_line();
+					return;
+				
+			}
+			}
+		   white_line();
+			left_sensor = ADC_Conversion(1);
+			right_sensor = ADC_Conversion(3);
+			center_sensor = ADC_Conversion(2);
+			if((center_sensor>=5)&&(right_sensor>=5)&&(left_sensor>=5))
+			{   if(j==1)
+				{
+					counter++;
+				}
+				else counter--;
+				i++;
+				if(flag2==0)
+				{
+					bam();
+				}
+				else
+				{
+					zoom();
+				}
+				return;
+			}
+			
+}
 void zoom(void)
 { 
 while ( (counter!=placearr[v])&&(j==1))
@@ -1335,8 +1410,8 @@ void bam(void)
 			return;
 		}
 		
-		{
 			if (rvalue<=20)
+			{
 			forward();
 			_delay_ms(35);
 		    stop();
@@ -1358,8 +1433,8 @@ void bam(void)
 			boom();
 			zoom();
 			return;
+	     }
 	}
-		}
 	
 }
 void init_devices (void)
