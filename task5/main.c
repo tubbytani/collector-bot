@@ -513,30 +513,30 @@ void servo_3_free (void) //makes servo 3 free rotating
 
 void pick(void)
 {
-	unsigned char v = 50,n=150,m=100;
+	unsigned char v = 100,n=120,m=100;
 	init_devices();
 	
 
 	
-	for (v = 120; v>0; v--)
+	for (v = 100; v>15; v--)
 	{
 		servo_1(v);
-		_delay_ms(100);
+		_delay_ms(50);
 	}
-	for(n=150; n>80;n--)
+	for(n=115; n>110;n--)
 	{
 		servo_2(n);
-		_delay_ms(100);
+		_delay_ms(50);
 	}
-	for(m=50;m>0;m--)
+	for(m=70;m>0;m--)
 	{
 		servo_3(m);
-		_delay_ms(100);
+		_delay_ms(50);
 	}
-	for(v=40; v<120;v++)
+	for(v=15; v<100;v++)
 	{
 		servo_1(v);
-		_delay_ms(100);
+		_delay_ms(50);
 	}
 	
 	_delay_ms(1000);
@@ -545,9 +545,63 @@ void pick(void)
 	servo_3_free();
 }
 void place(void)
-{
-	stop();
-}
+	{
+		unsigned char p= 100,q=110,r=0;
+		
+		init_devices();
+		if((counter == 5) || (counter == 13) )
+		{
+			for(q=110;q<160;q++)
+			{
+				servo_2(q);
+				_delay_ms(50);
+			}
+			for(p=100;p>50;p--)
+			{
+				servo_1(p);
+				_delay_ms(50);
+			}
+			for(r=0;r<50;r++)
+			{
+				servo_3(r);
+				_delay_ms(50);
+			}
+			for(p=50;p<100;p++)
+			{
+				servo_1(p);
+				_delay_ms(50);
+			}
+		}
+		else
+		{
+			for(p=100;p>40;p--)
+			{
+				servo_1(p);
+				_delay_ms(50);
+			}
+			for(q=110;q<125;q++)
+			{
+				servo_2(q);
+				_delay_ms(50);
+			}
+			for(r=0;r<50;r++)
+			{
+				servo_3(r);
+				_delay_ms(50);
+			}
+			for(p=40;p<100;p++)
+			{
+				servo_1(p);
+				_delay_ms(50);
+			}
+		}
+		_delay_ms(2000);
+		servo_1_free();
+		servo_2_free();
+		servo_3_free();
+		while(1);
+		
+	}
 /*void fwd_wls(void)
 {
 	unsigned char center_sensor;
@@ -832,7 +886,7 @@ void boom(void)
 }
 void zap(void)
 {
-	 if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
+	/* if ( ((final_array[i]==5)&&((final_array[i+1])==15))||((final_array[i]==15)&&((final_array[i+1])==5)))
 	{
 		if( (final_array[i]==5)&& (final_array[i+1]==15) )
 		{
@@ -882,7 +936,7 @@ void zap(void)
 		fwd();
 		counter--;
 		boom();
-	}
+	}*/
 	if ( ((final_array[i]==7)&&((final_array[i+1])==13))||((final_array[i]==13)&&((final_array[i+1])==7)))
 	{  
 		if( (final_array[i]==7)&& (final_array[i+1]==13) )
@@ -895,13 +949,13 @@ void zap(void)
 		}
 		lvalue=ADC_Conversion(5);
 		rvalue=ADC_Conversion(4);
-		if(lvalue<50)
+		if(j==1)
 		{
 			right();
 			_delay_ms(450);
 			stop();
 		}
-		 if(rvalue<50)
+		 if(j==0)
 		{
 			left();
 			_delay_ms(450);
@@ -992,7 +1046,7 @@ void fwd(void)
 				_delay_ms(5);
 				stop();
 				//velocity(120,110);
-				if((counter==3)||(counter==5)||(counter==11)||(counter==9)&&(final_array[i+1]!=10))
+				if(((counter==3)||(counter==5)||(counter==11)||(counter==9))&&(final_array[i+1]!=10))
 				{
 					
 					if(right_sensor>=5||center_sensor>=5)
@@ -1329,7 +1383,7 @@ while( (counter!=placearr[v])&&(j==0))
 		else
 		{
 			
-		if(lvalue<50)
+		if(j==1)
 		{
 			left();
 			_delay_ms(600);
@@ -1347,7 +1401,7 @@ while( (counter!=placearr[v])&&(j==0))
 			
 		}
 		else
-		if(rvalue<50)
+		if(j==0)
 		{
 			right();
 			_delay_ms(600);
@@ -1384,10 +1438,8 @@ void bam(void)
 	
 	if (counter==pickarr[i])
 	{  
-		lvalue=ADC_Conversion(5);
-		rvalue=ADC_Conversion(4);
-		if (lvalue<=80)
-		{   forward();
+		 
+		   forward();
 			_delay_ms(35);
 			stop();
 			left();
@@ -1408,9 +1460,8 @@ void bam(void)
 			boom();
 			zoom();
 			return;
-		}
-		
-			if (rvalue<=20)
+			
+			/*if (rvalue<=20)
 			{
 			forward();
 			_delay_ms(35);
@@ -1433,7 +1484,7 @@ void bam(void)
 			boom();
 			zoom();
 			return;
-	     }
+	     }*/
 	}
 	
 }
