@@ -4,7 +4,7 @@ left_sensor = ADC_Conversion(1);
 	while ((left_sensor >=5) || (right_sensor >=5) || (center_sensor >=5))
 	{
 		forward();
-		_delay_ms(15);//---------idhar ka sure ni ki delay ayega
+		_delay_ms(15);
 		left_sensor = ADC_Conversion(1);
 		right_sensor = ADC_Conversion(3);
 		center_sensor = ADC_Conversion(2);
